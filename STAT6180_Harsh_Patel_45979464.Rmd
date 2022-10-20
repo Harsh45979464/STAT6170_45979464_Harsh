@@ -1,0 +1,91 @@
+---
+title: "STAT6180_45979464"
+author: "Harsh Patel"
+date: "2022-10-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1 (a).
+```{r Question 1 (a).}
+library(readxl)
+mice_pot <- read_excel("C:/Users/harsh/Desktop/mice_pot.xlsx")
+data <- data.frame(A = mice_pot$`Group 0.3`, B = mice_pot$`Group 1`, C = mice_pot$`Group 3`, D = mice_pot$`Group VEH`)
+boxplot(data, main = "Boxplot - Effects of Marijuana on Mice", xlab = "Treatment Groups", ylab = "Locomotor Activity")
+```
+$$
+\text{The boxes seems to be equally sized implying that the locomotor activity appear to have the same variability, although there are only four observations per dosage.}
+\\ \text{Equal variance assumption seems satisfactory in this context. Lastly the median for 3 groups seems similar with a slight outlier of the other.}
+$$
+
+## Question 1 (b).
+$$
+H_0 = \alpha_1 = \alpha_2 = \alpha_3 = \alpha_4
+\\H_1 \not= 0 \ \text{For Atleast One} \  \alpha_i, i = 1, 2, 3, 4
+\\ \text{Where}\ \alpha_i \text{ = level of activity as measured by the total distance covered by the mice in boxe/s lined with photocells}
+\\ \text{Test Value Statistic = 3.126}
+\\ \text{Under null test statistic, } F_\text{obs} \text{ against } F_\text{g-1, N-g}
+\\ \text{P-Value = P(}F_\text{3,42}\geq 0.0514) < \alpha = 0.05
+\\ \text{P-Value = 0.0357}
+\\ \text{Reject}\ H_0
+\\ \text{Conclude that there is likely a difference in activities across the four dosages}
+$$
+```{r Question 1 (b).}
+summary <-read.table('mice_pottxt.txt', header = TRUE)
+summary.aov = aov(percent_of_act ~ group, data = summary)
+summary(summary.aov)
+```
+
+## Question 1 (c).
+$$
+H_0 : \mu_\text{3 doses as a whole} = \mu_\text{3mg/Kg}
+\\H_1 : \mu_\text{3 doses as a whole} \not = \mu_\text{3mg/Kg}
+\\ \text{Test Statistic Value = 3.1222}
+\\ \text{Degress of Freedom = 44}
+\\ \text{P-Value = 0.003169, Reject }H_0 \text{under 5% significance level}
+\\ \text{Conclude that there is likely a difference in average activity between the three dosages as a whole and highest dosage}
+$$
+```{r Question 1 (c).}
+library(readxl)
+JointAnalysis <- read_excel("C:/Users/harsh/Desktop/JointAnalysis.xlsx")
+t.test(JointAnalysis$`Group Joint`, JointAnalysis$`Group 3`, var.equal = TRUE)
+```
+## Question 2 (a).
+$$
+\text{This design is a balanced study as the number of replicates for each treatment is the same}
+$$
+
+## Question 2 (b).
+```{r Question 2 (b).}
+kml <- read.table('kml.dat', header = TRUE)
+kml.aov = aov(kmL ~ driver, data = kml)
+qqnorm(kml.aov$residuals)
+boxplot(kmL ~ driver, data = kml)
+```
+$$
+\text{The Normal Q-Q plot of the residuals seems to show a strong linear trend meaning the residuals are closely normally distributed}
+\\ \text{The boxes also seems to be equally sized implying the fuel efficiency of each new car engine appear to have the same variability}
+$$
+
+## Question 2 (c).
+```{r Question 2 (c).}
+summary(kml.aov)
+```
+$$
+H_0: \mu_1 = \mu_2 = \mu_3 = \mu_4
+\\H_1: \text{Not all means equal}
+\\ \mu_i \text{ is effect of driver for production variation}
+\\ \text{The assumptions seem to be satisfied as provided with ouput and reasoning in previous question}
+\\ \text{If} \ H_0 \text{ is true }, F_\text{obs} \text{ behaves as such }F_\text{3,36} \text{ distribution}
+\\ \text{Test Statistic = 33.41}
+\\ \text{P-Value} P(F_\text{3,36} \geq 33.41) = 1.67e-10 < 0.05
+$$
+
+## Question 2 (d).
+
+$$
+\text{Conclude since P-Value < signficance level (0.05) therefore we have evidence to reject } H_0 \text{ in favour of } H_1. \text{Hence evidence to conclude the observed fuel efficieny is not the same for the different drivers.}
+$$
